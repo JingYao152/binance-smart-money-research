@@ -1,0 +1,15 @@
+[http]
+timeout = 30.0
+min_interval = 1.0
+max_retries = 3
+backoff_factor = 1.0
+
+[collection]
+days = 365
+market_type = "UM"
+overlap_ms = 86400000
+symbols = ["BTCUSDT", "ETHUSDT", "SOLUSDT"]
+intervals = ["1h"]
+
+[storage]
+path = "data/research.duckdb"

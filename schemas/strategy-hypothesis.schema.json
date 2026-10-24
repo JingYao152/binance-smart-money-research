@@ -1,0 +1,193 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "enum": [
+              "observed",
+              "derived",
+              "hypothesis"
+            ]
+          },
+          "claim": {
+            "enum": [
+              "source_record",
+              "known_outcome_win_rate",
+              "known_realized_net_pnl",
+              "symbol_position_outcomes",
+              "observed_leverage_distribution",
+              "observed_direction_counts",
+              "observed_partial_closes",
+              "source_record_coverage",
+              "strategy_candidate"
+            ]
+          },
+          "sample_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "evidence_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "label",
+          "claim",
+          "sample_count",
+          "evidence_ids"
+        ]
+      },
+      "minItems": 1
+    },
+    "strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "enum": [
+            "ema_crossover",
+            "rsi_threshold"
+          ]
+        },
+        "direction": {
+          "enum": [
+            "long",
+            "short"
+          ],
+          "default": "long"
+        },
+        "fast": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 12
+        },
+        "slow": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 26
+        },
+        "rsi_period": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 14
+        },
+        "oversold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "overbought": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "exit_level": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "required": [
+        "kind"
+      ]
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "leverage": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2,
+          "default": 1
+        },
+        "max_leverage": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "position_fraction": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "max_drawdown": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 1
+        },
+        "fee_bps": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000
+        },
+        "slippage_bps": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 10000
+        }
+      },
+      "required": [
+        "max_leverage",
+        "position_fraction",
+        "max_drawdown",
+        "fee_bps",
+        "slippage_bps"
+      ]
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "train_start": {
+          "type": "string",
+          "format": "date"
+        },
+        "train_end": {
+          "type": "string",
+          "format": "date"
+        },
+        "test_start": {
+          "type": "string",
+          "format": "date"
+        },
+        "test_end": {
+          "type": "string",
+          "format": "date"
+        }
+      },
+      "required": [
+        "train_start",
+        "train_end",
+        "test_start",
+        "test_end"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "claims",
+    "strategy",
+    "risk",
+    "validation"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:smartmoney-research:strategy-hypothesis:1.0",
+  "title": "Evidence-bound strategy hypothesis 1.0",
+  "description": "Runtime additionally enforces bundle candidates, evidence subsets, rule parameter semantics, leverage <= max_leverage and nonoverlapping chronological windows."
+}

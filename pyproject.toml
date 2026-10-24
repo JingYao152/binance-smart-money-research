@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smartmoney-research"
+version = "0.1.0"
+description = "Local research on publicly shared trading records"
+requires-python = ">=3.11"
+dependencies = ["duckdb>=1.1,<2", "numpy>=1.26,<3", "pandas>=2.1,<4", "vectorbt>=1.1.1,<2"]
+
+[project.scripts]
+smartmoney-research = "smartmoney_research.cli:main"
+
+[project.optional-dependencies]
+test = ["pytest>=7"]
+dashboard = ["streamlit>=1.40,<2"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
